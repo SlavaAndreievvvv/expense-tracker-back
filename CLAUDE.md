@@ -30,7 +30,11 @@
 - [x] Крок 1 (практика): `nest new` (pnpm, Nest 12), розібрано згенеровані файли,
       `emitDecoratorMetadata` + `reflect-metadata` → як Nest резолвить залежності;
       додано `GET /ping` (логіка в сервісі), навмисно зламано DI і подивились на помилку
-- [ ] Крок 2: Supabase — що це технічно (Postgres + сервіси), створення проєкту, підключення з Nest  ← **ми тут**
+- [x] Крок 2: Supabase — що це технічно (Postgres + сервіси), ролі/ключі, GRANT vs RLS, створення проєкту;
+      `@nestjs/config` + динамічні модулі (`forRoot`, `isGlobal`); власний `SupabaseModule`
+      (`useFactory` + `inject`, injection token, `@Inject`); `/ping` робить реальний запит у Supabase;
+      юніт-тести з моком клієнта через `useValue` (3 тести зелені)
+- [ ] Крок 3: перший модуль `Transactions` — CRUD  ← **ми тут**
 
 ## Нотатки
 (сюди додаємо важливі рішення: яку ORM обрали, структура таблиць, змінні оточення тощо)
@@ -40,7 +44,14 @@
 - Вихідники: `D:\expense-tracker-notes\_src\NN-назва.html` + спільний `style.css`.
   Збірка всіх PDF: `bash /d/expense-tracker-notes/_src/build.sh` (headless Edge).
 - Після завершення кожного кроку (або великої його частини) — оновити/додати конспект і перезібрати PDF.
-- `02-...` поки без розділу про власний `SupabaseModule` (`useFactory`) — дописати після частини B2.
+- Готові: `01-nestjs-osnovy-di.pdf`, `02-supabase-i-konfiguratsiia.pdf` (включно з `SupabaseModule` і тестами з моками).
+
+### Структура коду
+- `src/supabase/`: `supabase.constants.ts` (токен `SUPABASE_CLIENT`), `supabase.provider.ts`
+  (`useFactory` + `inject: [ConfigService]`, `getOrThrow`, `auth: { persistSession: false, autoRefreshToken: false }`),
+  `supabase.module.ts` (експортує токен; **не** глобальний — feature-модулі імпортують його явно).
+- Інжект: `@Inject(SUPABASE_CLIENT) supabase: SupabaseClient`. Серверний клієнт ніколи не логінимо (singleton).
+- Користувач пише конструктори в довгій формі (поле + присвоєння) — це ок, не виправляти.
 
 ### Supabase
 - Проєкт `expense-tracker`, регіон West EU (Ireland, `eu-west-1`), план Free (пауза після ~тижня неактивності → Restore project).

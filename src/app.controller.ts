@@ -11,7 +11,7 @@ export class AppController {
   }
 
   @Get('ping')
-  getPing(): PingResponse {
+  getPing(): Promise<PingResponse> {
     return this.appService.getPing();
   }
 }
