@@ -34,3 +34,21 @@
 
 ## Нотатки
 (сюди додаємо важливі рішення: яку ORM обрали, структура таблиць, змінні оточення тощо)
+
+### Конспекти (PDF)
+- Папка `D:\expense-tracker-notes\` — по одному PDF на кожен крок Roadmap, детально, з прикладами, для початківця.
+- Вихідники: `D:\expense-tracker-notes\_src\NN-назва.html` + спільний `style.css`.
+  Збірка всіх PDF: `bash /d/expense-tracker-notes/_src/build.sh` (headless Edge).
+- Після завершення кожного кроку (або великої його частини) — оновити/додати конспект і перезібрати PDF.
+- `02-...` поки без розділу про власний `SupabaseModule` (`useFactory`) — дописати після частини B2.
+
+### Supabase
+- Проєкт `expense-tracker`, регіон West EU (Ireland, `eu-west-1`), план Free (пауза після ~тижня неактивності → Restore project).
+- Архітектура: React → **Nest API** → Supabase. Фронт напряму в Supabase не ходить.
+- Security при створенні: Data API ☑, **auto-expose new tables ☐**, **automatic RLS ☑**.
+  → При створенні таблиць треба явно видавати `GRANT ... TO service_role`, інакше `permission denied`.
+- Nest ходить із **secret**-ключем (`service_role`, обходить RLS) → фільтр по `user_id` — відповідальність Nest.
+
+### Змінні оточення (`.env`, шаблон у `.env.example`)
+- `SUPABASE_URL` — Project URL
+- `SUPABASE_SECRET_KEY` — `sb_secret_...` (тільки сервер, ніколи не в чат/скріни/git)
